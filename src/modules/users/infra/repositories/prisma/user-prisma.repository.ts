@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateFavoriteMediaUseCase } from 'src/modules/users/application/usecases/create-favorite-media.usecase';
 import { GetFavoritesMediaUseCase } from 'src/modules/users/application/usecases/get-favorites-media.usecase';
+import { RemoveFavoriteMediaUseCase } from 'src/modules/users/application/usecases/remove-favorite-media.usecase';
 import { IUserRepository } from 'src/modules/users/domain/repositories/user.repository.interface';
 import { PrismaService } from 'src/shared/infra/prisma/prisma.service';
 import { v4 as uuid } from 'uuid';
@@ -47,6 +48,15 @@ export class UserRepository implements IUserRepository {
     return media;
   }
 
+  private async findFavorite(userId: string, mediaId: string) {
+    return this.prisma.favorite.findFirst({
+      where: {
+        userId,
+        mediaId,
+      },
+    });
+  }
+
   async createFavoriteMedia(
     body: CreateFavoriteMediaUseCase.Input,
   ): Promise<CreateFavoriteMediaUseCase.Output> {
@@ -77,10 +87,9 @@ export class UserRepository implements IUserRepository {
   async getUserFavorites(body: GetFavoritesMediaUseCase.Input): Promise<GetFavoritesMediaUseCase.Output> {
     const user = await this.findById(body.userId);
 
-    const page = body.page ?? 1;
-    const limit = body.limit ?? 10;
+    const page = Number(body.page) || 1;
+    const limit = Number(body.limit) || 10;
     const skip = (page - 1) * limit;
-
 
     const favorites = await this.prisma.favorite.findMany({
       where: { userId: user.id },
@@ -95,5 +104,21 @@ export class UserRepository implements IUserRepository {
         limit,
         total: await this.prisma.favorite.count({ where: { userId: user.id } }),
       };
+  }
+
+    async removeFavoriteMedia(body: RemoveFavoriteMediaUseCase.Input): Promise<RemoveFavoriteMediaUseCase.Output> {
+    const user = await this.findById(body.userId);
+
+    const media = await this.findMediaById(body.mediaId);
+
+    const favorite = await this.findFavorite(user.id, media.id);
+
+    if (!favorite) {
+      throw new NotFoundException('Favorite not found for this user and media');
     }
+
+    await this.prisma.favorite.delete({
+      where: { id: favorite.id },
+    });
+  }
 }
