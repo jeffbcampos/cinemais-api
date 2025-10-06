@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateFavoriteMediaUseCase } from 'src/modules/users/application/usecases/create-favorite-media.usecase';
+import { GetFavoritesMediaUseCase } from 'src/modules/users/application/usecases/get-favorites-media.usecase';
 import { IUserRepository } from 'src/modules/users/domain/repositories/user.repository.interface';
 import { PrismaService } from 'src/shared/infra/prisma/prisma.service';
 import { v4 as uuid } from 'uuid';
@@ -72,4 +73,27 @@ export class UserRepository implements IUserRepository {
       },
     });
   }
+
+  async getUserFavorites(body: GetFavoritesMediaUseCase.Input): Promise<GetFavoritesMediaUseCase.Output> {
+    const user = await this.findById(body.userId);
+
+    const page = body.page ?? 1;
+    const limit = body.limit ?? 10;
+    const skip = (page - 1) * limit;
+
+
+    const favorites = await this.prisma.favorite.findMany({
+      where: { userId: user.id },
+      include: { media: true },
+      skip,
+      take: limit,
+    });
+
+    return {
+        items: favorites.map(fav => fav.media),        
+        page,
+        limit,
+        total: await this.prisma.favorite.count({ where: { userId: user.id } }),
+      };
+    }
 }
