@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
@@ -9,27 +9,27 @@ datasource db {
 }
 
 model users {
-  id        String     @id
+  id        String    @id
   name      String
-  email     String     @unique
+  email     String    @unique
   password  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  relation  favorite[]
+  favorite  favorite[]  @relation("users")
 }
 
 model media {
-  id          String     @id
+  id          String    @id
   title       String
   description String
   type        MediaType
   releaseYear Int
   genre       String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
-  relation    favorite[]
+  favorite    favorite[] @relation("media")
 }
 
 model favorite {
@@ -39,8 +39,8 @@ model favorite {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  User      users     @relation(fields: [userId], references: [id])
-  Media     media     @relation(fields: [mediaId], references: [id])
+  user      users     @relation("users", fields: [userId], references: [id])
+  media     media     @relation("media", fields: [mediaId], references: [id])
 
   @@unique([userId, mediaId])
   @@index([userId])
