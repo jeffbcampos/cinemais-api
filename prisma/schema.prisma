@@ -1,7 +1,6 @@
-
-
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -9,37 +8,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id String @id
-  name String
-  email String @unique
-  password String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model users {
+  id        String     @id
+  name      String
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   deletedAt DateTime?
+  relation  favorite[]
 }
 
-model Media {
-  id String @id
-  title String
+model media {
+  id          String     @id
+  title       String
   description String
-  type String
+  type        MediaType
   releaseYear Int
-  genre String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
+  genre       String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
+  relation    favorite[]
 }
 
-model Favorite {
-  id String @id
-  userId String
-  mediaId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model favorite {
+  id        String    @id
+  userId    String
+  mediaId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+  User      users     @relation(fields: [userId], references: [id])
+  Media     media     @relation(fields: [mediaId], references: [id])
 
   @@unique([userId, mediaId])
   @@index([userId])
   @@index([mediaId])
+}
+
+enum MediaType {
+  movie
+  series
 }
