@@ -1,7 +1,9 @@
 import { MediaType } from "@prisma/client";
 import { CreateMediaDto } from "../../application/dto/create-media.dto";
 import { Media } from "../entities/media.entity";
+import { FindAllMediasUseCase } from "../../application/usecases/find-all-medias.usecase";
 
 export interface IMediaRepository {
-    createMedia(body: CreateMediaDto): Promise<Media>;
+  createMedia(body: CreateMediaDto): Promise<Media>;
+  findAllMedia(body: FindAllMediasUseCase.Input): Promise<FindAllMediasUseCase.Output>;
 }
