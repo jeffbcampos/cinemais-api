@@ -8,30 +8,25 @@ export class FindAllMediasDto {
 
 export class FindAllMediasResponseDto {
     @ApiProperty({
-    type: 'object',
-    properties: {
-      items: {
-        type: 'array',
-        items: {
-          example: {
-            id: 'uuid',
-            title: 'Inception',
-            description: 'A mind-bending thriller about dreams within dreams.',
-            releaseYear: 2010,
-            genre: 'Sci-Fi',
-            createdAt: '2023-10-01T12:00:00.000Z',
-            updatedAt: '2023-10-01T12:00:00.000Z',
-            deletedAt: null,
-          }
+      example: [
+        {
+          id: 'uuid-v4-example',
+          title: 'Inception',
+          description: 'A mind-bending thriller by Christopher Nolan.',
+          type: 'movie',
+          releaseYear: new Date('2010-07-16'),
+          genre: 'Science Fiction',
+          createdAt: new Date('2023-01-01T00:00:00Z'),
+          updatedAt: new Date('2023-01-01T00:00:00Z'),
+          deletedAt: null,
         },
-      },      
-      page: { type: 'number', example: 1 },
-      limit: { type: 'number', example: 10 },
-      total: { type: 'number', example: 50 },
-    },
+      ],
     })
     items: Media[];
+    @ApiProperty()
     total: number;
+    @ApiProperty()
     page: number;
+    @ApiProperty()
     limit: number;
 }
