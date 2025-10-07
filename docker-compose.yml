@@ -12,30 +12,28 @@ services:
       - "5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   app:
-    build: .
-    command: npm run start:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run prisma:seed && npm run start:dev"
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
       DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/cinemais"
+      PORT: 3000
     ports:
       - "3000:3000"
     depends_on:
-      - postgres
-
-  prisma-migrate:
-    image: node:20
-    working_dir: /usr/src/app
-    volumes:
-      - .:/usr/src/app
-    environment:
-      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/cinemais"
-    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run prisma:seed"
-    depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
