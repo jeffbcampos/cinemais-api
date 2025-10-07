@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { CreateFavoriteMediaUseCase } from 'src/modules/users/application/usecases/create-favorite-media.usecase';
 import { GetFavoritesMediaUseCase } from 'src/modules/users/application/usecases/get-favorites-media.usecase';
 import { RemoveFavoriteMediaUseCase } from 'src/modules/users/application/usecases/remove-favorite-media.usecase';
@@ -18,7 +19,7 @@ export class UserRepository implements IUserRepository {
 
   public static createInstance(): UserRepository {
     if (!UserRepository.instance) {
-      const prisma = new PrismaService();
+      const prisma = PrismaService.getInstance();
       UserRepository.instance = new UserRepository(prisma);
     }
     return this.instance;
