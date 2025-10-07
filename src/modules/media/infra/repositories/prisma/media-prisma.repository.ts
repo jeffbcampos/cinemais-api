@@ -1,6 +1,9 @@
+import { NotFoundException } from "@nestjs/common";
 import { MediaType } from "@prisma/client";
+import { NotFoundError } from "rxjs";
 import { CreateMediaUseCase } from "src/modules/media/application/usecases/create-media.usecase";
 import { FindAllMediasUseCase } from "src/modules/media/application/usecases/find-all-medias.usecase";
+import { FindMediaByIdUseCase } from "src/modules/media/application/usecases/find-media-by-id.usecase";
 import { IMediaRepository } from "src/modules/media/domain/repositories/media.repository.interface";
 import { PrismaService } from "src/shared/infra/prisma/prisma.service";
 import { v4 as uuid } from 'uuid';
@@ -53,6 +56,18 @@ export class MediaPrismaRepository implements IMediaRepository {
             limit,
             total: await this.prisma.media.count()
         };
+    }
+
+    async findMediaById(body: FindMediaByIdUseCase.Input): Promise<FindMediaByIdUseCase.Output> {
+        const media = await this.prisma.media.findUnique({
+            where: { id: body.id },
+        });
+
+        if (!media) {
+            throw new NotFoundException('Media not found');
+        }
+
+        return media;
     }
 
 }

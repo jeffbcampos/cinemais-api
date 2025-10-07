@@ -2,11 +2,10 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Post, Query } from '@ne
 import { CreateFavoriteMediaDto } from '../../application/dto/create-favorite-media.dto';
 import { createFavoriteMediaUseCaseFactory } from '../../application/factories/create-favorite-media.usecase.factory';
 import { getFavoritesMediaUseCaseFactory } from '../../application/factories/get-favorites-media.usecase.factory';
-import { media } from '@prisma/client';
-import { GetFavoritesMediaDto } from '../../application/dto/get-favorites-media.dto';
 import { GetFavoritesMediaUseCase } from '../../application/usecases/get-favorites-media.usecase';
 import { removeFavoriteMediaUseCaseFactory } from '../../application/factories/remove-favorite-media.usecase.factory';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { GetFavoritesMediaResponseDto } from '../../application/dto/get-favorites-media.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -26,6 +25,10 @@ export class UsersController {
   @Get('/:userId/favorites')
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiResponse({
+    status: 200,
+    type: GetFavoritesMediaResponseDto,
+  })
   getFavorites(
     @Param('userId') userId: string,
     @Query('page') page?: number,
