@@ -2,7 +2,7 @@ import { IUserRepository } from '../../domain/repositories/user.repository.inter
 import { CreateFavoriteMediaDto } from '../dto/create-favorite-media.dto';
 
 export namespace CreateFavoriteMediaUseCase {
-  export type Input = CreateFavoriteMediaDto;
+  export type Input = CreateFavoriteMediaDto & { userId: string };
 
   export type Output = void;
 

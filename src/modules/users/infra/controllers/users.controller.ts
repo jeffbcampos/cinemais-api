@@ -12,15 +12,6 @@ import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 @Controller('users')
 export class UsersController {
 
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-          mediaId: { type: 'string', example: 'uuid-of-the-media' },
-        },
-      required: ['mediaId'],
-    }
-  })
   @HttpCode(204)
   @Post('/:userId/favorites')
   createFavorite(
