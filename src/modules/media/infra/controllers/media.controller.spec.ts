@@ -98,13 +98,10 @@ describe('MediaController', () => {
   describe('findAllMedia', () => {
     it('should return all medias with pagination', async () => {
       const mockResponse = {
-        data: [mockMedia],
-        meta: {
-          total: 1,
-          page: 1,
-          limit: 10,
-          totalPages: 1,
-        },
+        items: [mockMedia],
+        page: 1,
+        limit: 10,
+        total: 1,
       };
 
       mockFindAllMediasUseCase.execute.mockResolvedValue(mockResponse);
