@@ -5,7 +5,7 @@ import { UsersModule } from './modules/users/infra/main/users.module';
 import { PrismaModule } from './shared/infra/prisma/prisma.module';
 import { UsersController } from './modules/users/infra/controllers/users.controller';
 import { MediaModule } from './modules/media/infra/main/media.module';
-import { MediaController } from './modules/media/infra/controllers/media/media.controller';
+import { MediaController } from './modules/media/infra/controllers/media.controller';
 
 @Module({
   imports: [UsersModule, PrismaModule, MediaModule],
