@@ -2,7 +2,7 @@ import { CreateFavoriteMediaUseCase } from '../../application/usecases/create-fa
 import { GetFavoritesMediaUseCase } from '../../application/usecases/get-favorites-media.usecase';
 import { RemoveFavoriteMediaUseCase } from '../../application/usecases/remove-favorite-media.usecase';
 
-export interface IUserRepository {
+export interface IUserPrismaRepository {
   createFavoriteMedia(
     input: CreateFavoriteMediaUseCase.Input,
   ): Promise<CreateFavoriteMediaUseCase.Output>;

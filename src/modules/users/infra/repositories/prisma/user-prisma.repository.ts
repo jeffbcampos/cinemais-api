@@ -7,20 +7,20 @@ import { Prisma } from '@prisma/client';
 import { CreateFavoriteMediaUseCase } from 'src/modules/users/application/usecases/create-favorite-media.usecase';
 import { GetFavoritesMediaUseCase } from 'src/modules/users/application/usecases/get-favorites-media.usecase';
 import { RemoveFavoriteMediaUseCase } from 'src/modules/users/application/usecases/remove-favorite-media.usecase';
-import { IUserRepository } from 'src/modules/users/domain/repositories/user.repository.interface';
+import { IUserPrismaRepository } from 'src/modules/users/domain/repositories/user.repository.interface';
 import { PrismaService } from 'src/shared/infra/prisma/prisma.service';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
-export class UserRepository implements IUserRepository {
-  private static instance: UserRepository;
+export class UserPrismaRepository implements IUserPrismaRepository {
+  private static instance: UserPrismaRepository;
 
   constructor(private readonly prisma: PrismaService) {}
 
-  public static createInstance(): UserRepository {
-    if (!UserRepository.instance) {
+  public static createInstance(): UserPrismaRepository {
+    if (!UserPrismaRepository.instance) {
       const prisma = PrismaService.getInstance();
-      UserRepository.instance = new UserRepository(prisma);
+      UserPrismaRepository.instance = new UserPrismaRepository(prisma);
     }
     return this.instance;
   }

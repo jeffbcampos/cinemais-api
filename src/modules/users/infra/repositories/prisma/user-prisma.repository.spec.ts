@@ -2,10 +2,10 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MediaType } from '@prisma/client';
 import { PrismaService } from 'src/shared/infra/prisma/prisma.service';
-import { UserRepository } from './user-prisma.repository';
+import { UserPrismaRepository } from './user-prisma.repository';
 
-describe('UserRepository', () => {
-  let repository: UserRepository;
+describe('UserPrismaRepository', () => {
+  let repository: UserPrismaRepository;
   let prismaService: PrismaService;
 
   const mockUser = {
@@ -58,7 +58,7 @@ describe('UserRepository', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UserRepository,
+        UserPrismaRepository,
         {
           provide: PrismaService,
           useValue: mockPrismaService,
@@ -66,7 +66,7 @@ describe('UserRepository', () => {
       ],
     }).compile();
 
-    repository = module.get<UserRepository>(UserRepository);
+    repository = module.get<UserPrismaRepository>(UserPrismaRepository);
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
@@ -478,11 +478,11 @@ describe('UserRepository', () => {
 
   describe('createInstance', () => {
     it('deve criar uma instância singleton do repositório', () => {
-      const instance1 = UserRepository.createInstance();
-      const instance2 = UserRepository.createInstance();
+      const instance1 = UserPrismaRepository.createInstance();
+      const instance2 = UserPrismaRepository.createInstance();
 
       expect(instance1).toBe(instance2);
-      expect(instance1).toBeInstanceOf(UserRepository);
+      expect(instance1).toBeInstanceOf(UserPrismaRepository);
     });
   });
 });

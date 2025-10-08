@@ -1,5 +1,5 @@
 import { media } from "@prisma/client";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface";
+import { IUserPrismaRepository } from "../../domain/repositories/user.repository.interface";
 import { GetFavoritesMediaDto } from "../dto/get-favorites-media.dto";
 
 export namespace GetFavoritesMediaUseCase {
@@ -14,11 +14,11 @@ export namespace GetFavoritesMediaUseCase {
 
   export class Usecase {
     constructor(
-        private readonly userRepository: IUserRepository,
+        private readonly UserPrismaRepository: IUserPrismaRepository,
     ) {}
 
     async execute(input: Input): Promise<Output> {
-      const media = await this.userRepository.getUserFavorites(input);
+      const media = await this.UserPrismaRepository.getUserFavorites(input);
       return media;
     }
   }
