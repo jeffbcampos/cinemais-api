@@ -1,6 +1,4 @@
 import { NotFoundException } from "@nestjs/common";
-import { MediaType } from "@prisma/client";
-import { NotFoundError } from "rxjs";
 import { CreateMediaUseCase } from "src/modules/media/application/usecases/create-media.usecase";
 import { FindAllMediasUseCase } from "src/modules/media/application/usecases/find-all-medias.usecase";
 import { FindMediaByIdUseCase } from "src/modules/media/application/usecases/find-media-by-id.usecase";

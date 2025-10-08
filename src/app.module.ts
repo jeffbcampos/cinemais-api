@@ -9,7 +9,7 @@ import { MediaController } from './modules/media/infra/controllers/media.control
 
 @Module({
   imports: [UsersModule, PrismaModule, MediaModule],
-  controllers: [AppController, UsersController, MediaController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
